@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getAmadeusAccessToken } = require('./auth/amadeusAuth');
+const { getAmadeusAccessToken } = require('../auth/amadeusAuth');
 const HotelSuggestion = require('../models/HotelSuggestion');
 const { getCityIATACode } = require('../utils/locationUtils');
 
