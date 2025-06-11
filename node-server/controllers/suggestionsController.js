@@ -1,10 +1,11 @@
 const HotelOffer = require('../models/HotelOffer');
 const { fetchTravelSuggestions } = require('../services/fetchTravelSuggestions');
 const { getHotelOffersByIds } = require('../services/getHotelOffersbyIds');
-
+const {fetchFlightSuggestions} = require('../services/fetchFlightSuggestions');
 
 exports.getSuggestions = async (req, res) => {
   try {
+    const flightSuggestions = await fetchFlightSuggestions(req.body);
     const suggestions = await fetchTravelSuggestions(req.body);
 
     const hotelIds = suggestions.hotels.map(h => h.hotelId);

@@ -17,7 +17,7 @@ const hotelSuggestionSchema = new mongoose.Schema({
     value: Number,
     unit: String
   },
-  lastUpdate: String // or use Date if you'd like: `lastUpdate: Date`
+  lastUpdate: String
 });
 
 module.exports = mongoose.model('HotelSuggestion', hotelSuggestionSchema, 'hotelList');
