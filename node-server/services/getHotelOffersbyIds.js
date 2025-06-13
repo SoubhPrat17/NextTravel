@@ -23,7 +23,6 @@ async function getHotelOffersByIds({ hotelIds, accessToken, fromDate, toDate, ad
       const data = response.data;
 
       if (data?.data?.length > 0) {
-        console.log(`✅ Offers found for hotelId ${hotelId} (${data.data[0].hotel.name})`);
         detailedOffers.push({
           name: data.data[0].hotel.name,
           hotelId,
@@ -35,12 +34,9 @@ async function getHotelOffersByIds({ hotelIds, accessToken, fromDate, toDate, ad
           adults,
           offers: data.data
         });
-      } else {
-        console.log(`⚠️ No offers for hotelId ${hotelId}`);
       }
 
     } catch (err) {
-      console.error(`❌ Error fetching offer for hotelId ${hotelId}:`, err.message);
     }
   }
 

@@ -3,7 +3,7 @@ const { getAmadeusAccessToken } = require('../auth/amadeusAuth');
 const HotelSuggestion = require('../models/HotelSuggestion');
 const { getCityIATACode } = require('../utils/locationUtils');
 
-const fetchTravelSuggestions = async ({ fromDate, toDate, source, destination, adults }) => {
+const fetchHotelSuggestions = async ({ fromDate, toDate, source, destination, adults }) => {
   try {
     const accessToken = await getAmadeusAccessToken();
 
@@ -53,4 +53,4 @@ const fetchTravelSuggestions = async ({ fromDate, toDate, source, destination, a
   }
 };
 
-module.exports = { fetchTravelSuggestions };
+module.exports = { fetchHotelSuggestions };

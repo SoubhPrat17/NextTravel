@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { getAmadeusAccessToken } = require('../auth/amadeusAuth');
 const { getCityIATACode } = require('../utils/locationUtils');
-const FlightSuggestions = require('../models/FlightSuggestions');
+const Flight = require('../models/FlightSuggestions');
 
 const fetchFlightSuggestions = async ({ fromDate, toDate, source, destination, adults }) => {
     try {
@@ -24,18 +24,30 @@ const fetchFlightSuggestions = async ({ fromDate, toDate, source, destination, a
             }
         });
 
-        const flightData = flightListResponse.data.data;
 
-        if (!Array.isArray(flightData) || flightData.length === 0) {
+        const flightOffers = flightListResponse.data.data;
+
+        if (!Array.isArray(flightOffers) || flightOffers.length === 0) {
             console.warn(`No flight data received for ${source} → ${destination}`);
             return [];
         }
 
-        // Save to MongoDB
-        await FlightSuggestions.insertMany(flightData, { ordered: true });
-        console.log(`✅ Inserted ${flightData.length} flight records for ${sourceIATA} → ${destinationIATA}`);
+        // Save to MongoDB using upsert (no duplicates)
+        for (const flight of flightOffers) {
+            try {
+                await Flight.updateOne(
+                    { id: flight.id },
+                    { $set: flight }, 
+                    { upsert: true }
+                );
+            } catch (err) {
+                console.warn(`⚠️ Failed to upsert flight with ID ${flight.id}:`, err.message);
+            }
+        }
 
-        return flightData;
+        console.log(`✅ Upserted ${flightOffers.length} flight records for ${sourceIATA} → ${destinationIATA}`);
+
+        return flightOffers;
     } catch (error) {
         console.error("❌ Couldn't fetch or save flights:", error.response?.data || error.message);
         throw new Error("Flight fetching or saving failed");

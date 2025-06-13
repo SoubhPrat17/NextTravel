@@ -110,15 +110,7 @@ const hotelOfferSchema = new mongoose.Schema({
             }
           },
           self: String,
-          roomInformation: {
-            description: String,
-            type: String,
-            typeEstimated: {
-              bedType: String,
-              beds: Number,
-              category: String
-            }
-          }
+          roomInformation: Schema.Types.Mixed
         }
       ],
       self: String

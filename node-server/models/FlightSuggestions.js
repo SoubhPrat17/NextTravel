@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const flightSuggestionSchema = new mongoose.Schema({
   type: String,
@@ -19,11 +20,13 @@ const flightSuggestionSchema = new mongoose.Schema({
         {
           departure: {
             iataCode: String,
-            at: String
+            at: String,
+            terminal: String
           },
           arrival: {
             iataCode: String,
-            at: String
+            at: String,
+            terminal: String
           },
           carrierCode: String,
           number: String,
@@ -46,12 +49,7 @@ const flightSuggestionSchema = new mongoose.Schema({
     currency: String,
     total: String,
     base: String,
-    fees: [
-      {
-        amount: String,
-        type: String
-      }
-    ],
+    fees: Schema.Types.Mixed,
     grandTotal: String
   },
 
@@ -78,14 +76,32 @@ const flightSuggestionSchema = new mongoose.Schema({
           cabin: String,
           fareBasis: String,
           brandedFare: String,
+          brandedFareLabel: String,
           class: String,
           includedCheckedBags: {
-            quantity: Number
-          }
+            quantity: Number,
+            weight: Number,
+            weightUnit: String
+          },
+          includedCabinBags: {
+            weight: Number,
+            weightUnit: String
+          },
+          amenities: [
+            {
+              description: String,
+              isChargeable: Boolean,
+              amenityType: String,
+              amenityProvider: {
+                name: String
+              }
+            }
+          ]
         }
       ]
     }
   ]
-});
+}, { strict: false });
+
 
 module.exports = mongoose.model('Flight', flightSuggestionSchema, 'flightSuggestions');
